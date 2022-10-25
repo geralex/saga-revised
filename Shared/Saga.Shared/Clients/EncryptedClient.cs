@@ -75,7 +75,7 @@ namespace Saga.Shared.NetworkCore
                     {
                         WaitCallback callback = delegate(object state)
                         {
-                            packet = Encryption.Decrypt(packet, 2, this.clientKey);
+                            //packet = Encryption.Decrypt(packet, 2, this.clientKey);
                             ProcessPacket(ref packet);
                         };
 
@@ -130,7 +130,7 @@ namespace Saga.Shared.NetworkCore
         {
             try
             {
-                buffer = Encryption.Encrypt(buffer, 2, this.serverKey);
+                //buffer = Encryption.Encrypt(buffer, 2, this.serverKey);
                 this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
             }
             catch (ObjectDisposedException)
@@ -143,8 +143,8 @@ namespace Saga.Shared.NetworkCore
         {
             try
             {
-                byte[] tmpbuffer = Encryption.Encrypt(buffer, 2, this.serverKey);
-                this.socket.BeginSend(tmpbuffer, 0, tmpbuffer.Length, SocketFlags.None, null, null);
+                //byte[] tmpbuffer = Encryption.Encrypt(buffer, 2, this.serverKey);
+                this.socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, null, null);
             }
             catch (ObjectDisposedException)
             {
