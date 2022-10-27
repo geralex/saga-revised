@@ -98,7 +98,7 @@ namespace Saga.Gateway.Network
                 case 0x0501: RedirectMap(body); return;
                 case 0x0301: RedirectLogin(body); return;
 
-                case 0x0502: LogOut(body); return;
+                //case 0x0502: LogOut(body); return;
 
 
                 default: Trace.TraceWarning("Unsupported packet found with id: {0:X4}", packetIdentifier); this.Close(); break;
@@ -332,7 +332,7 @@ namespace Saga.Gateway.Network
         }
 
 
-        private void LogOut(byte[] body)
+        /*private void LogOut(byte[] body)
         {
             Console.WriteLine("!LogOut!");
 
@@ -345,7 +345,7 @@ namespace Saga.Gateway.Network
             //GatewayPool.Instance.lookup.Remove(this.session);
             //RedirectLogin(body);
 
-        }
+        }*/
 
         #endregion Internal Methods
     }
