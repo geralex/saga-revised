@@ -244,6 +244,11 @@ namespace Saga.Map.Data.Mysql
         bool SaveAdditionsEx(MySqlConnection connection, IInfoProvider2 dbq)
         {
             IDataAdditionCollection additionCollection = dbq.createAdditionCollection();
+
+            //MySqlCommand command = new MySqlCommand(_query_04, connection);
+            //develop
+            //int offset = 0;
+
             byte[] buffer = new byte[2044];
             int items = 0;
 
@@ -256,6 +261,8 @@ namespace Saga.Map.Data.Mysql
                 int offset = 4;
                 foreach (AdditionState current in additionCollection.Additions)
                 {
+                   //if (current == null) continue; //develop
+
                     uint duration = (current.CanExpire) ? current.Lifetime : 0;
                     uint addition = current.Addition;
 

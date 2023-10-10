@@ -21,10 +21,10 @@ namespace Saga.Tools.DBEquipement
 
             MySqlConnectionStringBuilder cb = new MySqlConnectionStringBuilder();
             cb.UserID = "root";
-            cb.Password = "root";
+            cb.Password = "";
             cb.Port = 3306;
             cb.Server = "localhost";
-            cb.Database = "saga";
+            cb.Database = "rogotw";
 
             conn = new MySqlConnection(cb.ConnectionString);
             conn.Open();
@@ -62,17 +62,16 @@ namespace Saga.Tools.DBEquipement
 
                 writer.WriteStartDocument();
 
-                writer.WriteStartElement("Inventory");
+                writer.WriteStartElement("Additions");
 
-                MySqlCommand command = new MySqlCommand("SELECT `ContainerMaxStorage`,`Container` FROM `inventory` WHERE `CharId`=?CharId", conn);
+                MySqlCommand command = new MySqlCommand("SELECT `Additions` FROM `list_additions` WHERE `CharId`=?CharId", conn);
                 command.Parameters.AddWithValue("CharId", uint.Parse( textBox1.Text ));
 
                 MySqlDataReader reader = command.ExecuteReader(CommandBehavior.SequentialAccess);
                 while (reader.Read())
                 {
 
-                    byte MaxInventoryStorage = reader.GetByte(0);
-                    byte[] buffer2 = new byte[4];
+                    byte[] buffer2 = new byte[8];
                     reader.GetBytes(1, 0, buffer2, 0, 4);
                     uint count = BitConverter.ToUInt32(buffer2, 0);
 
@@ -108,7 +107,7 @@ namespace Saga.Tools.DBEquipement
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //SAVE FILE
+           /* //SAVE FILE
             byte[] buffer = new byte[4];
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "*.xml|*.xml";
@@ -157,13 +156,13 @@ namespace Saga.Tools.DBEquipement
                 reader.ReadEndElement();
 
 
-                MySqlCommand command = new MySqlCommand("INSERT INTO `inventory` (`CharId`,`Container`,`ContainerMaxStorage`) VALUES (?CharId,?Container, ?MaxInventory) ON duplicate KEY UPDATE `ContainerMaxStorage`=?MaxInventory AND `Container`=?Container;", conn);
+                MySqlCommand command = new MySqlCommand("INSERT INTO `list_inventory` (`CharId`,`Container`,`ContainerMaxStorage`) VALUES (?CharId,?Container, ?MaxInventory) ON duplicate KEY UPDATE `ContainerMaxStorage`=?MaxInventory AND `Container`=?Container;", conn);
                 command.Parameters.AddWithValue("CharId", uint.Parse(textBox1.Text));
                 command.Parameters.AddWithValue("Container", buffer);
                 command.Parameters.AddWithValue("MaxInventory", 32);
                 command.ExecuteNonQuery();
-
-            }
+                
+            }*/
         }
     }
 }

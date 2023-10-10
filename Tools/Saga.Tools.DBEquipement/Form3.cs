@@ -32,5 +32,11 @@ namespace Saga.Tools.DBEquipement
             Form4 frm = new Form4();
             frm.Show();
         }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            Form5 frm = new Form5();
+            frm.Show();
+        }
     }
 }

@@ -1676,7 +1676,7 @@ namespace Saga.Map.Client
                     }
                 }
 
-                //Update other stats
+                //Update other stats - develop
                 //Common.Internal.CheckWeaponary(this.character);
                 //CommonFunctions.UpdateCharacterInfo(this.character, 0);
                 //CommonFunctions.SendBattleStatus(this.character);

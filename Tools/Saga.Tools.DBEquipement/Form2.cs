@@ -22,10 +22,10 @@ namespace Saga.Tools.DBEquipement
 
             MySqlConnectionStringBuilder cb = new MySqlConnectionStringBuilder();
             cb.UserID = "root";
-            cb.Password = "root";
+            cb.Password = "";
             cb.Port = 3306;
             cb.Server = "localhost";
-            cb.Database = "saga";
+            cb.Database = "rogotw";
 
             conn = new MySqlConnection(cb.ConnectionString);
             conn.Open();

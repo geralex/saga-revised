@@ -29,7 +29,7 @@ namespace Saga.PrimaryTypes
             this.TickLogged = Environment.TickCount;
             this.LASTBREATH_TICK = Environment.TickCount;
             this.LASTHP_TICK = Environment.TickCount;
-            //this.LASTLP_TICK = Environment.TickCount;
+            this.LASTLP_TICK = Environment.TickCount; //develop
             this.LASTSP_TICK = Environment.TickCount;
             this.ModelId = CharacterId;
             this.CharacterJobLevel = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -55,7 +55,7 @@ namespace Saga.PrimaryTypes
             this.TickLogged = Environment.TickCount;
             this.LASTBREATH_TICK = Environment.TickCount;
             this.LASTHP_TICK = Environment.TickCount;
-            //this.LASTLP_TICK = Environment.TickCount;
+            this.LASTLP_TICK = Environment.TickCount; //develop
             this.LASTSP_TICK = Environment.TickCount;
             this.id = SessionId;
             this.ModelId = CharacterId;
@@ -168,8 +168,9 @@ namespace Saga.PrimaryTypes
         /// <summary>
         /// Defines the last lp tick
         /// </summary>
-        //[NonSerialized()]
-        //internal int LASTLP_TICK = 0;
+        /// develop
+        [NonSerialized()]
+        internal int LASTLP_TICK = 0;
 
         /// <summary>
         /// Defines the last breath tick
@@ -567,14 +568,16 @@ namespace Saga.PrimaryTypes
         /// your breath capacity. Once your LC drops down to 0 we'll invoked for damage
         /// packets if the player is still diving.
         /// </remarks>
-        public bool OnBreath()
+        /*public bool OnBreath()
         {
             int delta_t = Environment.TickCount - LASTBREATH_TICK;
             LASTBREATH_TICK = Environment.TickCount;
 
-            if (IsDiving == true)
+           if (IsDiving == true)
             {
-                if (delta_t > 1000)
+             
+                
+                if (delta_t > 1000) //???
                 {
                     if (_status.CurrentOxygen > 0)
                     {
@@ -583,7 +586,7 @@ namespace Saga.PrimaryTypes
                     }
                     else
                     {
-                        ushort damage = (ushort)((double)this.HPMAX * 0.0001 * delta_t);
+                    ushort damage = (ushort)((double)this.HPMAX * 0.0001 * delta_t);
                         damage = (this.HP > damage) ? damage : this.HP;
                         this.HP -= damage;
                         this._status.Updates |= 1;
@@ -595,6 +598,7 @@ namespace Saga.PrimaryTypes
             }
             else
             {
+             
                 if (delta_t > 1000 - _status.OxygenRecoveryRate)
                 {
                     bool LCRegen = _status.CurrentOxygen < _status.MaximumOxygen;
@@ -602,34 +606,82 @@ namespace Saga.PrimaryTypes
                     this._status.Updates |= 1;
                     return LCRegen;
                 }
-
                 return false;
             }
+            return false;
+        }*/
 
+        public bool OnBreath()
+        {
+
+            int delta_t = Environment.TickCount - LASTBREATH_TICK;
+            //LASTBREATH_TICK = Environment.TickCount;
+
+            if (IsDiving == true)// && Environment.TickCount - LASTBREATH_TICK > (1000 - this._status.OxygenRecoveryRate))
+            {
+                if (delta_t > 1000) //???
+                {
+                    LASTBREATH_TICK = Environment.TickCount;
+
+                    if (_status.CurrentOxygen > 0)
+                    {
+                        _status.CurrentOxygen--;
+                        this._status.Updates |= 1;
+                    }
+                    else
+                    {
+                        ushort damage = (ushort)((double)this.HPMAX * 0.0001 * delta_t);
+                        damage = (this.HP > damage) ? damage : this.HP;
+                        this.HP -= damage;
+                        this._status.Updates |= 1;
+                        Console.WriteLine("SendOxygenTakeDamage: {0}", damage);
+                        CommonFunctions.SendOxygenTakeDamage(this, damage);
+                    }
+
+                    return true;
+                }
+            }
+            else
+            {
+                 if (_status.CurrentOxygen < _status.MaximumOxygen)
+                 {
+                     bool LCRegen = _status.CurrentOxygen < _status.MaximumOxygen;
+                     if (LCRegen == true) _status.CurrentOxygen += 10;
+                     this._status.Updates |= 1;
+                     return LCRegen;
+                 }
+                 else
+                 {
+                    _status.CurrentOxygen = _status.MaximumOxygen;
+                 }
+                 
+                return false;
+            }
             return false;
         }
 
+        //develop
         /// <summary>
         /// Occurs when reducing the LP for reduction
         /// </summary>
         /// <returns>True if LP is reduced</returns>
-        //public bool OnLPReduction()
-        //{
-        //	if(LASTLP_TICK<_status.LASTLP_ADD)
-        //		LASTLP_TICK=_status.LASTLP_ADD;
-        //    int delta_t = Environment.TickCount - LASTLP_TICK;
-        //    if (delta_t > 60000)
-        //    {
-        //        LASTLP_TICK = Environment.TickCount;
-        //        if (_status.CurrentLp > 0)
-        //        {
-        //            _status.CurrentLp--;
-        //            this._status.Updates |= 1;
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        public bool OnLPReduction()
+        {
+        	if(LASTLP_TICK<_status.LASTLP_ADD)
+        		LASTLP_TICK=_status.LASTLP_ADD;
+            int delta_t = Environment.TickCount - LASTLP_TICK;
+            if (delta_t > 15000) //60k
+            {
+                LASTLP_TICK = Environment.TickCount;
+                if (_status.CurrentLp > 0)
+                {
+                    _status.CurrentLp--;
+                    this._status.Updates |= 1;
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public override void OnSkillUsedByTarget(MapObject source, SkillBaseEventArgs e)
         {

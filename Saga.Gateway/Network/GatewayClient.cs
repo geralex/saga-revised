@@ -1,6 +1,4 @@
-using Saga.Gateway.Packets;
 using Saga.Packets;
-using Saga.Shared.NetworkCore;
 using Saga.Shared.PacketLib;
 using Saga.Shared.PacketLib.Gateway;
 using System;
@@ -18,10 +16,6 @@ namespace Saga.Gateway.Network
         public static bool CheckCrc = false;
         public uint session = 0;
         public WorldClient world;
-
-        //develop
-        public bool onKick = false;
-        public bool onKickMap = false;
 
         public GatewayClient(Socket socket)
             : base(socket)
@@ -97,10 +91,6 @@ namespace Saga.Gateway.Network
                 case 0x0104: OnIdentify(); return;
                 case 0x0501: RedirectMap(body); return;
                 case 0x0301: RedirectLogin(body); return;
-
-                //case 0x0502: LogOut(body); return;
-
-
                 default: Trace.TraceWarning("Unsupported packet found with id: {0:X4}", packetIdentifier); this.Close(); break;
             }
         }
@@ -114,18 +104,15 @@ namespace Saga.Gateway.Network
             Trace.TraceInformation("Header Recieved from {0}", this.socket.RemoteEndPoint);
             try
             {
-                SMSG_IDENTIFY spkt2 = new SMSG_IDENTIFY();
-                this.Send((byte[])spkt2);
-                /*
-                //byte[] tempServerKey = Encryption.GenerateKey();
-                //byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
+                byte[] tempServerKey = Encryption.GenerateKey();
+                byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
                 SMSG_SENDKEY spkt = new SMSG_SENDKEY();
-                //spkt.Key = expandedServerKey;
+                spkt.Key = expandedServerKey;
                 spkt.Collumns = 4;
                 spkt.Rounds = 10;
                 spkt.Direction = 2;
                 this.Send((byte[])spkt);
-                //this.serverKey = tempServerKey;*/
+                this.serverKey = tempServerKey;
             }
             catch (Exception ex)
             {
@@ -143,9 +130,6 @@ namespace Saga.Gateway.Network
                 SMSG_GUID spkt = new SMSG_GUID();
                 spkt.Key = Program.CrcKey;
                 this.Send((byte[])spkt);
-
-                Trace.TraceInformation("Key Recieved {0}", Program.CrcKey);
-
             }
             catch (Exception ex)
             {
@@ -171,8 +155,6 @@ namespace Saga.Gateway.Network
                 {
                     SMSG_IDENTIFY spkt2 = new SMSG_IDENTIFY();
                     this.Send((byte[])spkt2);
-                    Trace.TraceInformation("GUID Recieved {0}", key);
-
                 }
             }
             catch (Exception ex)
@@ -234,7 +216,6 @@ namespace Saga.Gateway.Network
                 Trace.TraceInformation("Set session-id {1} received from: {0}", this.socket.RemoteEndPoint, session);
                 if (session > 0)
                 {
-                     
                     //Update session, add session to lookup table
                     this.session = session;
                     GatewayPool.Instance.lookup.Add(session, this);
@@ -267,7 +248,6 @@ namespace Saga.Gateway.Network
             }
             catch (System.Net.Sockets.SocketException)
             {
-                
                 //Closing connection
                 this.Close();
             }
@@ -280,14 +260,10 @@ namespace Saga.Gateway.Network
                 LoginClient client;
                 if (NetworkManager.TryGetLoginClient(out client))
                 {
-                    //Console.WriteLine("!!!");
-
                     client.Send(body);
                 }
                 else
                 {
-                    //Console.WriteLine("!!!!");
-
                     //Output a error
                     byte[] buffer2 = new byte[] { 0x0B, 0x00, 0x74, 0x17, 0x91, 0x00, 0x02, 0x07, 0x00, 0x00, 0x01 };
                     Array.Copy(BitConverter.GetBytes(session), 0, buffer2, 2, 4);
@@ -311,7 +287,6 @@ namespace Saga.Gateway.Network
                 if (world != null)
                 {
                     world.Send(body);
-                    //Console.WriteLine("!!!!!");
                 }
                 else
                 {
@@ -330,22 +305,6 @@ namespace Saga.Gateway.Network
                 this.Close();
             }
         }
-
-
-        /*private void LogOut(byte[] body)
-        {
-            Console.WriteLine("!LogOut!");
-
-            if (world != null) world.Close();
-
-            //Forward to out client
-            ClientKick spkt2 = new ClientKick();
-            spkt2.SessionId = this.session;
-            this.Send((byte[])spkt2);
-            //GatewayPool.Instance.lookup.Remove(this.session);
-            //RedirectLogin(body);
-
-        }*/
 
         #endregion Internal Methods
     }

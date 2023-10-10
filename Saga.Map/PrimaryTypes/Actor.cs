@@ -123,7 +123,8 @@ namespace Saga.PrimaryTypes
         {
             get
             {
-                return _status.CurrentHp;
+                //develop
+                return (ushort)_status.CurrentHp;
             }
             set
             {
@@ -155,7 +156,8 @@ namespace Saga.PrimaryTypes
         {
             get
             {
-                return _status.CurrentSp;
+                //develop
+                return (ushort)_status.CurrentSp;
             }
             set
             {

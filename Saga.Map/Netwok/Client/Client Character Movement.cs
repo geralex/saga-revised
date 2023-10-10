@@ -9,8 +9,8 @@ namespace Saga.Map.Client
 {
     partial class Client
     {
-
-        /*
+		//develop
+        
         Thread MOVEMENT_THREAD;
         Stack<MapObject> APPEREANCE_QUEUE = new Stack<MapObject>();
         Queue<MapObject> UPDATE_QUEUE = new List<MapObject>();
@@ -41,6 +41,6 @@ namespace Saga.Map.Client
                 this.Send((byte[])spkt2);
             }
         }
-        */
+        
     }
 }

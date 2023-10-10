@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
-using LuaInterface;
+//using LuaInterface;
 using Saga.Quests;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Diagnostics;
+//using System.Diagnostics;
+using NLua;
+using NLua.Exceptions;
 
 namespace Saga.Map.Data.LuaQuest
 {

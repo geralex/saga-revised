@@ -24,10 +24,8 @@ namespace Saga.Gateway
         private static IPAddress gatewayip = IPAddress.Any;
         private static int authenticationport = 64001;
         private static IPAddress authenticationip = IPAddress.Loopback;
-        //private static string guidkey = "A928CDC9DBE8751B3BC99EB65AE07E0C849CE739";
-        //private static string crckey = "ED90AA25AE906FB36308C8523A4737A7E7B1FC6F";
-        private static string guidkey = "0000000000000000000000000000000000000000";
-        private static string crckey = "0000000000000000000000000000000000000000";
+        private static string guidkey = "A928CDC9DBE8751B3BC99EB65AE07E0C849CE739";
+        private static string crckey = "ED90AA25AE906FB36308C8523A4737A7E7B1FC6F";
         private static EncryptedManager<GatewayClient> networkManger;
         private static ConsoleReader reader;
 

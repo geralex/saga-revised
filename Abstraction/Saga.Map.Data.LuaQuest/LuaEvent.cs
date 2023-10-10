@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LuaInterface;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using LuaInterface;
 using Saga.Events;
+using NLua;
+using NLua.Exceptions;
 
 namespace Saga.Map.Data.LuaQuest
 {
     using Events = Saga.Factory.EventManager;
-    using System.Diagnostics;
+    //using System.Diagnostics;
     using System.IO;
     public class EventInfo : Events.BaseEventInfo, IDisposable
     {

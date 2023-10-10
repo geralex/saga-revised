@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
 using Saga.Quests;
-using LuaInterface;
+//using LuaInterface;
 using System.IO;
 using System.Runtime.Serialization;
+using NLua;
+using NLua.Exceptions;
 
 namespace Saga.Map.Data.LuaQuest
 {
