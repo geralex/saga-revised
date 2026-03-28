@@ -1,4 +1,6 @@
+using Saga.Gateway.Packets;
 using Saga.Packets;
+using Saga.Shared.NetworkCore;
 using Saga.Shared.PacketLib;
 using Saga.Shared.PacketLib.Gateway;
 using System;
@@ -104,15 +106,15 @@ namespace Saga.Gateway.Network
             Trace.TraceInformation("Header Recieved from {0}", this.socket.RemoteEndPoint);
             try
             {
-                byte[] tempServerKey = Encryption.GenerateKey();
-                byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
+                //byte[] tempServerKey = Encryption.GenerateKey();
+                //byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
                 SMSG_SENDKEY spkt = new SMSG_SENDKEY();
-                spkt.Key = expandedServerKey;
+                //spkt.Key = expandedServerKey;
                 spkt.Collumns = 4;
                 spkt.Rounds = 10;
                 spkt.Direction = 2;
                 this.Send((byte[])spkt);
-                this.serverKey = tempServerKey;
+                //this.serverKey = tempServerKey;
             }
             catch (Exception ex)
             {
@@ -130,6 +132,7 @@ namespace Saga.Gateway.Network
                 SMSG_GUID spkt = new SMSG_GUID();
                 spkt.Key = Program.CrcKey;
                 this.Send((byte[])spkt);
+                Trace.TraceInformation("Key Recieved {0}", Program.CrcKey);
             }
             catch (Exception ex)
             {
@@ -155,6 +158,7 @@ namespace Saga.Gateway.Network
                 {
                     SMSG_IDENTIFY spkt2 = new SMSG_IDENTIFY();
                     this.Send((byte[])spkt2);
+                    Trace.TraceInformation("GUID Recieved {0}", key);
                 }
             }
             catch (Exception ex)
