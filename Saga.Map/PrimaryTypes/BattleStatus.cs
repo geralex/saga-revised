@@ -147,9 +147,9 @@ namespace Saga.PrimaryTypes
 
         public ushort CastingTime = 0;                   // 577
 
-        public AdditionInteger DefencePhysical;                   // 578
-        public AdditionInteger DefenceRanged;                   // 579
-        public AdditionInteger DefenceMagical;                    // 580
+        public AdditionInteger DefenceRanged = 0;                   // 578
+        public AdditionInteger DefencePhysical = 0;                   // 579
+        public AdditionInteger DefenceMagical = 0;                    // 580
 
         public ushort BlockratePhysical;                 // 580
         public ushort BlockrateRanged;                   // 581

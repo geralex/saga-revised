@@ -39,7 +39,7 @@ namespace Saga.Skills
                     arguments.Damage = arguments.GetDamage(matrix);
                     arguments.Damage = arguments.GetDefenseReduction(matrix, arguments.Damage);
                     if (arguments.Damage >= atarget.Status.CurrentHp)
-                        asource.Status.CurrentLp = 7;
+                        asource.Status.CurrentLp = 5;
                     arguments.IsCritical(matrix);
                 }
             }

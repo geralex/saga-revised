@@ -146,7 +146,10 @@ namespace Saga.Tasks
                 {
                     if (c.Value.stance != 7)
                     {
-                        result2 = c.Value.OnRegenerateHP() | c.Value.OnRegenerateSP() | c.Value.OnBreath(); //| c.Value.OnLPReduction();
+                        result2 = c.Value.OnRegenerateHP() | c.Value.OnRegenerateSP() | c.Value.OnBreath() | c.Value.OnLPReduction();
+
+                        //develop
+                        c.Value.UpdateAdditions();
                     }
 
                     //PROCESS UPDATES

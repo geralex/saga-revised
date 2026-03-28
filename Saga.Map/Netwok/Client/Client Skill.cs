@@ -35,7 +35,7 @@ namespace Saga.Map.Client
                               && (info.maximumrange == 0 || info.IsInRangeOf((int)(Vector.GetDistance2D(this.character.Position, target.Position))))
                               && info.requiredWeapons[this.character.weapons.GetCurrentWeaponType()] == 1
                               && this.character.jlvl >= info.requiredJobs[this.character.job - 1]
-                              && this.character.Status.CurrentLp >= (info.requiredlp == 6 ? 1 : info.requiredlp)
+                              && this.character.Status.CurrentLp >= (info.requiredlp == 6 ? 1 : info.requiredlp) //develop
                               && info.IsTarget(this.character, target);
 
                     if (cancast)
@@ -148,7 +148,7 @@ namespace Saga.Map.Client
                               && (argument.SpellInfo.maximumrange == 0 || argument.SpellInfo.IsInRangeOf((int)(Vector.GetDistance2D(this.character.Position, target.Position))))
                               && argument.SpellInfo.requiredWeapons[this.character.weapons.GetCurrentWeaponType()] == 1
                               && this.character.jlvl >= argument.SpellInfo.requiredJobs[this.character.job - 1]
-                              && this.character.Status.CurrentLp >= (argument.SpellInfo.requiredlp == 6 ? 1 : argument.SpellInfo.requiredlp)
+                              && this.character.Status.CurrentLp >= (argument.SpellInfo.requiredlp == 6 ? 1 : argument.SpellInfo.requiredlp) //develop
                               && argument.SpellInfo.IsTarget(this.character, target);
 
                     if (cancast && argument.Use())
@@ -176,7 +176,7 @@ namespace Saga.Map.Client
                         }
 
                         //Use required lp points
-                        if (argument.SpellInfo.requiredlp == 6)
+                        if (argument.SpellInfo.requiredlp == 6) //develop
                         {
                             this.character._status.CurrentLp = 0;
                             this.character._status.Updates |= 1;

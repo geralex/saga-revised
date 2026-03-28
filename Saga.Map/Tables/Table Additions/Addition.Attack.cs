@@ -455,11 +455,24 @@ namespace Saga.Spells
         //580        | Magic Defence                            | True                 | False
         public static void ADDITION_PHYSICALDEFENSE(ref AdditionValue aval, int value)
         {
+
             Actor character = aval.sender as Actor;
-            if (aval.context == AdditionContext.Applied)
-                character._status.DefencePhysical += (byte)value;
-            else if (aval.context == AdditionContext.Deapplied)
-                character._status.DefencePhysical -= (byte)value;
+
+            /*if (aval.context == AdditionContext.Applied)
+             {
+                 character._status.DefencePhysical += (ushort)value;
+                 character._status.Updates |= 1;
+             }
+             else if (aval.context == AdditionContext.Reapplied || aval.context == AdditionContext.Deapplied)
+             {
+                 character._status.DefencePhysical -= (ushort)value;
+                 character._status.Updates |= 1;
+            }*/
+            
+            character._status.DefencePhysical = 0;
+            //character._status.DefencePhysical += (byte)value;
+            //character._status.Updates |= 1;
+
         }
 
         public static void ADDITION_MAGICALDEFENSE(ref AdditionValue aval, int value)
@@ -469,6 +482,7 @@ namespace Saga.Spells
                 character._status.DefenceMagical += (ushort)value;
             else if (aval.context == AdditionContext.Deapplied)
                 character._status.DefenceMagical -= (ushort)value;
+
         }
 
         //550        | Maximum HP                        | True                 | True
@@ -526,6 +540,7 @@ namespace Saga.Spells
                 if (character._status.CurrentHp > (ushort)character._status.MaxHP)
                 {
                     character._status.CurrentHp = (ushort)character._status.MaxHP;
+                    character._status.Updates |= 1;
                 }
             }
         }

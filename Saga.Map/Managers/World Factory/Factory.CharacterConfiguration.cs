@@ -154,10 +154,18 @@ namespace Saga.Factory
         /// <returns></returns>
         public ushort CalculateMaximumSP(Character target)
         {
-            if (target.job == 5)
-                return 210;
-            else
-                return 110;
+            //if (target.job == 5)
+            //{
+                //return 210;
+                ushort result = Convert.ToUInt16(210/*200*/ + ((target._level - 1) * 40));
+                return result;
+            //}
+            //else
+            //return 110;
+            //{
+            //    ushort result = Convert.ToUInt16(110/*200*/ + ((target._level - 1) * 40));
+            //    return result;
+            //}
         }
 
         /// <summary>
@@ -167,7 +175,7 @@ namespace Saga.Factory
         /// <returns></returns>
         public ushort CalculateMaximumHP(Character target)
         {
-            ushort result = Convert.ToUInt16(200 + ((target._level - 1) * 40));
+            ushort result = Convert.ToUInt16(250/*200*/ + ((target._level - 1) * 40));
             return result;
         }
 
@@ -365,6 +373,7 @@ namespace Saga.Factory
                 if (Singleton.Item.TryGetItemWithCount(4253, 1, out item))
                     tempChar.container.Add(item);
 
+
                 //---------------------------------------------------------------------------
                 //Add a weapon to your character
                 //---------------------------------------------------------------------------
@@ -377,6 +386,17 @@ namespace Saga.Factory
                 tempChar.weapons[0]._active = 1;
                 if (Singleton.Weapons.TryGetWeaponInfo(tempChar.weapons[0]._weapontype, tempChar.weapons[0]._weaponlevel, out tempChar.weapons[0].Info))
                     tempChar.weapons[0]._durabillity = (ushort)tempChar.weapons[0].Info.max_durabillity;
+
+                //develop
+                tempChar.weapons[1] = new Weapon();
+                tempChar.weapons[1]._weaponname = e.WeaponName;
+                tempChar.weapons[1]._weapontype = 1;
+                tempChar.weapons[1]._augeskill = 150001;
+                tempChar.weapons[1]._weaponlevel = 1;
+                tempChar.weapons[1]._suffix = e.WeaponAffix;
+                tempChar.weapons[1]._active = 1;
+                if (Singleton.Weapons.TryGetWeaponInfo(tempChar.weapons[1]._weapontype, tempChar.weapons[1]._weaponlevel, out tempChar.weapons[1].Info))
+                    tempChar.weapons[1]._durabillity = (ushort)tempChar.weapons[1].Info.max_durabillity;
 
                 //---------------------------------------------------------------------------
                 //Create a character by adding it to the database.
@@ -391,6 +411,9 @@ namespace Saga.Factory
                 }
                 else
                 {
+                    //Singleton.Database.InsertNewSkill(tempChar.ModelId, 1407401, 1);
+                    //Singleton.Database.InsertNewSkill(tempChar.ModelId, 1406901, 1);
+
                     character = tempChar;
                     return false;
                 }

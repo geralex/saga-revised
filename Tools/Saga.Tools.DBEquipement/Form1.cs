@@ -65,7 +65,7 @@ namespace Saga.Tools.DBEquipement
 
                 writer.WriteStartElement("Equipment");
 
-                MySqlCommand command = new MySqlCommand("SELECT `Equipement` FROM `equipment` WHERE `CharId`=?CharId", conn);
+                MySqlCommand command = new MySqlCommand("SELECT `Equipement` FROM `list_equipment` WHERE `CharId`=?CharId", conn);
                 command.Parameters.AddWithValue("CharId", uint.Parse(textBox1.Text, NumberFormatInfo.InvariantInfo));
 
                 MySqlDataReader reader = command.ExecuteReader(CommandBehavior.SequentialAccess);
@@ -142,7 +142,7 @@ namespace Saga.Tools.DBEquipement
                 reader.ReadEndElement();
 
 
-                MySqlCommand command = new MySqlCommand("INSERT INTO `equipment` (`CharId`,`Equipement`) VALUES (?CharId,?Equipment) ON duplicate KEY UPDATE `Equipement`=?Equipment;", conn);
+                MySqlCommand command = new MySqlCommand("INSERT INTO `list_equipment` (`CharId`,`Equipement`) VALUES (?CharId,?Equipment) ON duplicate KEY UPDATE `Equipement`=?Equipment;", conn);
                 command.Parameters.AddWithValue("CharId", uint.Parse(textBox1.Text, NumberFormatInfo.InvariantInfo));
                 command.Parameters.AddWithValue("Equipment", buffer);
                 command.ExecuteNonQuery();

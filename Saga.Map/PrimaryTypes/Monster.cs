@@ -124,7 +124,7 @@ namespace Saga.PrimaryTypes
         {
             get
             {
-                return 7;
+                return 5;
             }
             set
             {

@@ -63,7 +63,7 @@ public static class CommonFunctions
         spkt.SP = target.SP;
         spkt.MaxSP = target.SPMAX;
         spkt.LP = target._status.CurrentLp;
-        spkt.MaxLP = 7;
+        spkt.MaxLP = 5;
         spkt.FieldOfSight = update;
         spkt.SessionId = target.id;
         target.client.Send((byte[])spkt);
