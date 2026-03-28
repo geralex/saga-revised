@@ -3,6 +3,7 @@ using System;
 
 namespace Saga.Scripting.Zones
 {
+    [Serializable()]
     internal class IndoorMap : Saga.PrimaryTypes.Zone, ICloneable
     {
         public override void OnChangeWeather(int Weather)

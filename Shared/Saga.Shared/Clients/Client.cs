@@ -119,14 +119,21 @@ namespace Saga.Shared.NetworkCore
 
         public void Close()
         {
-            if (OnClose != null)
+            try
             {
-                OnClose.Invoke(this, null);
+                if (OnClose != null)
+                {
+                    OnClose.Invoke(this, null);
+                }
+                if (this.socket.Connected == true)
+                {
+                    Trace.WriteLine(string.Format("Connection closed from: {0}", socket.RemoteEndPoint), "Network");
+                    this.socket.Close();
+                }
             }
-            if (this.socket.Connected == true)
+            catch (Exception ex)
             {
-                Trace.WriteLine(string.Format("Connection closed from: {0}", socket.RemoteEndPoint), "Network");
-                this.socket.Close();
+                Trace.TraceError(ex.Message);
             }
         }
 

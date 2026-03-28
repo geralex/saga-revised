@@ -229,8 +229,15 @@ namespace Saga.Map.Data.LuaQuest
 
         public void Dispose()
         {
-            GC.SuppressFinalize(this);
-            myLua.Dispose();
+            try
+            {
+                GC.SuppressFinalize(this);
+                myLua.Dispose();
+            }
+            catch (Exception e)
+            {
+                __dbtracelog.WriteError("quest", "In quest a error unhandeld error occured while finalizing: {0}", e.Message);
+            }
         }
 
         #endregion
