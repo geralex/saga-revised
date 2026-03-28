@@ -93,6 +93,7 @@ namespace Saga.Gateway.Network
                 case 0x0104: OnIdentify(); return;
                 case 0x0501: RedirectMap(body); return;
                 case 0x0301: RedirectLogin(body); return;
+                case 0x0502: OnReturnToCharacterSelect(); return;
                 default: Trace.TraceWarning("Unsupported packet found with id: {0:X4}", packetIdentifier); this.Close(); break;
             }
         }
@@ -110,12 +111,12 @@ namespace Saga.Gateway.Network
                 this.Send((byte[])spkt2);
                 //byte[] tempServerKey = Encryption.GenerateKey();
                 //byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
-                SMSG_SENDKEY spkt = new SMSG_SENDKEY();
+                //SMSG_SENDKEY spkt = new SMSG_SENDKEY();
                 //spkt.Key = expandedServerKey;
-                spkt.Collumns = 4;
-                spkt.Rounds = 10;
-                spkt.Direction = 2;
-                this.Send((byte[])spkt);
+                //spkt.Collumns = 4;
+                //spkt.Rounds = 10;
+                //spkt.Direction = 2;
+                //this.Send((byte[])spkt);
                 //this.serverKey = tempServerKey;
             }
             catch (Exception ex)
@@ -309,6 +310,65 @@ namespace Saga.Gateway.Network
             {
                 Trace.TraceError("Connection with the world server has been lost, packet are discared");
                 this.Close();
+            }
+        }
+
+        /// <summary>
+        /// Handles CTGA_RECONNECTLOGIN (0x0502) — player requests return
+        /// from the game world to the character select screen.
+        /// Cleans up the map session, sends AGCT_RECONNECT success,
+        /// then requests the character list from the auth server.
+        /// </summary>
+        private void OnReturnToCharacterSelect()
+        {
+            Trace.TraceInformation("Return to character select from {0}, session {1}", this.socket.RemoteEndPoint, this.session);
+            try
+            {
+                if (world != null)
+                {
+                    world.Close();
+                    world = null;
+                }
+
+                SMSG_RECONNECT spkt = new SMSG_RECONNECT();
+                spkt.Result = 0;
+                spkt.SessionId = this.session;
+                this.Send((byte[])spkt);
+
+                SendCharacterListRequest();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Error during return to character select: {0}", ex.Message);
+                this.Close();
+            }
+        }
+
+        /// <summary>
+        /// Constructs a CM_CHARLIST request and forwards it to the auth
+        /// server so the client receives the character list immediately
+        /// after reconnecting to login mode.
+        /// </summary>
+        private void SendCharacterListRequest()
+        {
+            try
+            {
+                LoginClient client;
+                if (NetworkManager.TryGetLoginClient(out client))
+                {
+                    byte[] charListRequest = new byte[14];
+                    BitConverter.GetBytes((ushort)14).CopyTo(charListRequest, 0);
+                    BitConverter.GetBytes(this.session).CopyTo(charListRequest, 2);
+                    charListRequest[6] = 0x03;
+                    charListRequest[7] = 0x01;
+                    charListRequest[12] = 0x01;
+                    charListRequest[13] = 0x06;
+                    client.Send(charListRequest);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Error sending character list request: {0}", ex.Message);
             }
         }
 

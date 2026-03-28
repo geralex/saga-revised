@@ -3,6 +3,8 @@ using Saga.Authentication.Utils;
 using Saga.Packets;
 using Saga.Shared.PacketLib.Login;
 using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Saga.Authentication.Network
 {
@@ -18,6 +20,30 @@ namespace Saga.Authentication.Network
             if (LoginSessionHandler.sessions.TryGetValue(cpkt.SessionId, out session))
                 if (ServerManager2.Instance.server.TryGetValue(session.World, out info))
                 {
+                    // Выбор персонажа
+                    if (session.characterid != 0 && info.client != null)
+                    {
+                        Trace.TraceInformation("Reloading character list for session {0} (returning from game)", cpkt.SessionId);
+                        session.characterid = 0;
+                        session.CachedCharacterStates.Clear();
+
+                        session.IsWaiting = true;
+                        info.client.SM_SELECT_CHARACTERS(session.playerid, cpkt.SessionId);
+
+                        int LastTick = Environment.TickCount;
+                        while (session.IsWaiting)
+                        {
+                            if (Environment.TickCount - LastTick > 20000)
+                            {
+                                session.IsWaiting = false;
+                                break;
+                            }
+                            Thread.Sleep(0);
+                        }
+
+                        session.NCharacterCount = session.list.Count;
+                    }
+
                     SMSG_CHARACTERLIST spkt = new SMSG_CHARACTERLIST();
                     spkt.Result = 0;
                     spkt.CountAllServer = (byte)session.NCharacterCount;

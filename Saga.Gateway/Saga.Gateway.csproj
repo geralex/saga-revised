@@ -126,6 +126,7 @@
     <Compile Include="Packets\CMSG_SESSION_REQUEST.cs" />
     <Compile Include="Packets\SMSG_GUID.cs" />
     <Compile Include="Packets\SMSG_IDENTIFY.cs" />
+    <Compile Include="Packets\SMSG_RECONNECT.cs" />
     <Compile Include="Packets\SMSG_SENDKEY.cs" />
     <Compile Include="Packets\SMSG_SESSION_REPLY.cs" />
     <Compile Include="Packets\SMSG_UKNOWN.cs" />
