@@ -106,6 +106,8 @@ namespace Saga.Gateway.Network
             Trace.TraceInformation("Header Recieved from {0}", this.socket.RemoteEndPoint);
             try
             {
+                SMSG_IDENTIFY spkt2 = new SMSG_IDENTIFY();
+                this.Send((byte[])spkt2);
                 //byte[] tempServerKey = Encryption.GenerateKey();
                 //byte[] expandedServerKey = Encryption.GenerateDecExpKey(tempServerKey);
                 SMSG_SENDKEY spkt = new SMSG_SENDKEY();
