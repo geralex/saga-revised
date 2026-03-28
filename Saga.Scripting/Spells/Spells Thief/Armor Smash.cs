@@ -12,7 +12,7 @@ namespace Saga.Skills
                 arguments.Result = Saga.SkillBaseEventArgs.ResultType.NoDamage;
                 arguments.Damage = 0;
                 arguments.Failed = false;
-                Common.Skills.UpdateAddition(arguments.Target as Actor, arguments.Addition, 600000);
+                Common.Skills.UpdateAddition(arguments.Target as Actor, arguments.Addition, 50000);
                 //Do lp effect
                 Common.Skills.DoAddition(bargument.Sender as Actor, bargument.Sender as Actor, 1003301);
             }

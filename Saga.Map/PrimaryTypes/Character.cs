@@ -617,9 +617,10 @@ namespace Saga.PrimaryTypes
             int delta_t = Environment.TickCount - LASTBREATH_TICK;
             //LASTBREATH_TICK = Environment.TickCount;
 
-            if (IsDiving == true)// && Environment.TickCount - LASTBREATH_TICK > (1000 - this._status.OxygenRecoveryRate))
+            if (this.IsDiving == true)// && Environment.TickCount - LASTBREATH_TICK > (1000 - this._status.OxygenRecoveryRate))
             {
-                if (delta_t > 1000) //???
+                //if (delta_t > 1000) //???
+                if (Environment.TickCount - LASTBREATH_TICK > 1000)
                 {
                     LASTBREATH_TICK = Environment.TickCount;
 
@@ -632,7 +633,11 @@ namespace Saga.PrimaryTypes
                     {
                         ushort damage = (ushort)((double)this.HPMAX * 0.0001 * delta_t);
                         damage = (this.HP > damage) ? damage : this.HP;
-                        this.HP -= damage;
+                        //this.HP -= damage;
+						if(damage < 1)
+							this.HP -= 1;
+						else
+							this.HP -= damage;
                         this._status.Updates |= 1;
                         Console.WriteLine("SendOxygenTakeDamage: {0}", damage);
                         CommonFunctions.SendOxygenTakeDamage(this, damage);

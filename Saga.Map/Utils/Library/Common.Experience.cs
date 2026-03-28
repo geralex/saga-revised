@@ -83,37 +83,79 @@ namespace Common
             {
                 #region Check for character-level
 
-                if (character._level + 1 <= Singleton.experience.MaxCLVL)
-                {
-                    uint req_cexp = Singleton.experience.FindRequiredCexp((byte)(character._level + 1));
-                    if (cexp > 0)
-                    {
-                        result |= 32;
-                        result |= (character.Cexp + cexp >= req_cexp) ? 16 : 0;
-                    }
-                }
-                else
-                {
-                    cexp = 0;
-                }
+                //if (character._level + 1 <= Singleton.experience.MaxCLVL)
+                //{
+                //    uint req_cexp = Singleton.experience.FindRequiredCexp((byte)(character._level + 1));
+                //    if (cexp > 0)
+                //    {
+                //        result |= 32;
+                //        result |= (character.Cexp + cexp >= req_cexp) ? 16 : 0;
+                //    }
+                //}
+                //else
+                //{
+                //    cexp = 0;
+                //}
+                // Sync
+				if(cexp < 1) {
+					cexp = 0;
+				} else {
+					if(cexp > 100000) { // Anti auto lvl 90
+						cexp = (uint)(380 * character._level);
+					}
+					if (character._level + 1 <= Singleton.experience.MaxCLVL)
+					{
+						uint req_cexp = Singleton.experience.FindRequiredCexp((byte)(character._level + 1));
+						if (cexp > 0)
+						{
+							result |= 32;
+							result |= (character.Cexp + cexp >= req_cexp) ? 16 : 0;
+						}
+					}
+					else
+					{
+						cexp = 0;
+					}
+				}
 
                 #endregion Check for character-level
 
                 #region Check for job-level
 
-                if (character.jlvl + 1 <= Singleton.experience.MaxJLVL)
-                {
-                    uint req_jexp = Singleton.experience.FindRequiredJexp((byte)(character.jlvl + 1));
-                    if (jexp > 0)
-                    {
-                        result |= 4;
-                        result |= (character.Jexp + jexp >= req_jexp) ? 1 : 0;
-                    }
-                }
-                else
-                {
-                    jexp = 0;
-                }
+                //if (character.jlvl + 1 <= Singleton.experience.MaxJLVL)
+                //{
+                //    uint req_jexp = Singleton.experience.FindRequiredJexp((byte)(character.jlvl + 1));
+                //    if (jexp > 0)
+                //    {
+                //        result |= 4;
+                //        result |= (character.Jexp + jexp >= req_jexp) ? 1 : 0;
+                //    }
+                //}
+                //else
+                //{
+                //    jexp = 0;
+                //}
+                // Sync
+				if(jexp < 1) {
+					jexp = 0;
+				} else {
+					if(jexp > 100000) { // Anti auto lvl 90
+						jexp = (uint)(250 * character.jlvl);
+					}
+					if (character.jlvl + 1 <= Singleton.experience.MaxJLVL)
+					{
+						uint req_jexp = Singleton.experience.FindRequiredJexp((byte)(character.jlvl + 1));
+						if (jexp > 0)
+						{
+							result |= 4;
+							result |= (character.Jexp + jexp >= req_jexp) ? 1 : 0;
+						}
+					}
+					else
+					{
+						jexp = 0;
+					}
+				}
 
                 #endregion Check for job-level
 

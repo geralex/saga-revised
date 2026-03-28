@@ -164,10 +164,19 @@ namespace Saga.PrimaryTypes
         public void StartMovement(Point a)
         {
             //Set is moving to true
-            this.stance = 4;
+            //this.stance = 4;
 
             //Set my destination position
-            this.DestPosition = a;
+            //this.DestPosition = a;
+
+            // Sync
+			if(this._status.CannotMove > 0 || this._status.Sleep > 0) {
+				this.DestPosition = this.Position;
+				this.stance = 3;
+			} else {
+				this.stance = 4;
+				this.DestPosition = a;
+			}
 
             this.Yaw = new Rotator(Point.CalculateYaw(this.Position, a), 0);
 
@@ -193,10 +202,19 @@ namespace Saga.PrimaryTypes
         public void StartRunning(Point a)
         {
             //Set is moving to true
-            this.stance = 5;
+            //this.stance = 5;
 
             //Set my destination position
-            this.DestPosition = a;
+            //this.DestPosition = a;
+
+            // Sync
+            if(this._status.CannotMove > 0 || this._status.Sleep > 0) {
+				this.DestPosition = this.Position;
+				this.stance = 3;
+			} else {
+				this.stance = 5;
+				this.DestPosition = a;
+			}
 
             //Generate packet
             SMSG_ACTORMOVEMENTSTART spkt = new SMSG_ACTORMOVEMENTSTART();
@@ -491,6 +509,7 @@ namespace Saga.PrimaryTypes
             {
                 this._target = null;
                 //this.DestPosition = GenerateRandomPoint();
+                this.DestPosition = this.Position;
                 Saga.Tasks.BattleThread.Unsubscribe(this);
                 SwitchSpeed(_WALKSPEED);
                 this.Lifespan.lasttick = Environment.TickCount;
@@ -715,9 +734,15 @@ namespace Saga.PrimaryTypes
                 if (character != null)
                 {
                     //int leveldifference = this.Level - character.Level;
-                    bool cannotattack = character.stance == 7; //|| character._status.CannotAttack > 0 || leveldifference > character._status.AttackTresshold);
+                    //bool cannotattack = character.stance == 7; //|| character._status.CannotAttack > 0 || leveldifference > character._status.AttackTresshold);
+                    // Sync
+                    int leveldifference = this.Level - character.Level;
+                    bool cannotattack = character.stance == 7;
                     if (cannotattack)
                         return;
+                    // Sync
+					if (character._status.CannotAttack > 0 || leveldifference > character._status.AttackTresshold || character._status.Sleep > 0)
+						return;
                 }
 
                 //Compute the distance to determine if it should use a ranged or skill or
